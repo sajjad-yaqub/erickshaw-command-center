@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yuma Ops | Abhilash</title>
+    <meta name="description" content="Commitment and accountability tracker for Yuma Ops.">
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Design System Tokens */
+            --color-background-primary: #ffffff;
+            --color-background-secondary: #f8fafc;
+            --color-background-tertiary: #f1f5f9;
+            
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #475569;
+            --color-text-tertiary: #94a3b8;
+            
+            --color-primary: #2563eb;
+            --color-primary-bg: #eff6ff;
+            
+            --color-success: #10b981;
+            --color-success-bg: #ecfdf5;
+            
+            --color-warning: #f59e0b;
+            --color-warning-bg: #fffbeb;
+            
+            --color-danger: #ef4444;
+            --color-danger-bg: #fef2f2;
+            
+            --color-info: #0ea5e9;
+            --color-info-bg: #f0f9ff;
+            
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+            
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Outfit', var(--font-sans);
+            
+            --border-radius-sm: 6px;
+            --border-radius-md: 10px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 24px;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #e2e8f0; /* Desktop background */
+            font-family: var(--font-sans);
+            color: var(--color-text-primary);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Mobile Container (iPhone 375px) */
+        .pwa-container {
+            width: 100%;
+            max-width: 375px;
+            height: 812px; /* iPhone height */
+            background: var(--color-background-tertiary);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            border-radius: var(--border-radius-xl);
+        }
+
+        @media (max-width: 375px) {
+            body { background: var(--color-background-tertiary); }
+            .pwa-container { height: 100vh; border-radius: 0; box-shadow: none; }
+        }
+
+        /* Header & Greeting */
+        .header {
+            background: var(--color-background-primary);
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .date-label {
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .user-greeting {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-primary-bg);
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid var(--color-border);
+        }
+
+        .greeting-line {
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--color-text-secondary);
+            background: var(--color-background-secondary);
+            padding: 10px 14px;
+            border-radius: var(--border-radius-md);
+            border-left: 3px solid var(--color-primary);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 16px 100px;
+            scroll-behavior: smooth;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 20px 0 10px 4px;
+        }
+
+        /* DAU Chips */
+        .dau-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+        .dau-scroll::-webkit-scrollbar { display: none; }
+
+        .dau-chip {
+            background: var(--color-background-primary);
+            padding: 8px 12px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border);
+            white-space: nowrap;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trend-up { color: var(--color-success); }
+        .trend-down { color: var(--color-danger); }
+        .trend-neutral { color: var(--color-text-tertiary); }
+
+        /* Commitment Cards */
+        .card {
+            background: var(--color-background-primary);
+            border-radius: var(--border-radius-lg);
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            line-height: 1.3;
+            flex: 1;
+        }
+
+        .badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .badge-red { background: var(--color-danger-bg); color: var(--color-danger); }
+        .badge-amber { background: var(--color-warning-bg); color: var(--color-warning); }
+        .badge-green { background: var(--color-success-bg); color: var(--color-success); }
+        .badge-blue { background: var(--color-info-bg); color: var(--color-info); }
+
+        .card-body {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            margin-bottom: 14px;
+        }
+
+        .card-meta {
+            font-size: 11px;
+            color: var(--color-text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 14px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border);
+            background: var(--color-background-primary);
+            color: var(--color-text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .btn:active {
+            background: var(--color-background-secondary);
+            transform: scale(0.98);
+        }
+
+        /* City Grid */
+        .city-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .city-card {
+            background: var(--color-background-primary);
+            padding: 12px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .city-name {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .city-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .city-sub {
+            font-size: 11px;
+            color: var(--color-text-tertiary);
+            margin-top: 2px;
+        }
+
+        /* Tabs Navigation */
+        .tab-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: var(--color-background-primary);
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            padding: 0 20px;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+        }
+
+        .tab-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.5;
+        }
+
+        /* Ask Tab UI */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: var(--border-radius-lg);
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .message-user {
+            align-self: flex-end;
+            background: var(--color-primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-ai {
+            align-self: flex-start;
+            background: var(--color-background-secondary);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px 12px;
+            background: var(--color-background-secondary);
+            border-radius: 12px;
+            width: fit-content;
+            margin-bottom: 16px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--color-text-tertiary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-6px); }
+        }
+
+        .chat-input-area {
+            padding: 16px;
+            background: var(--color-background-primary);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .chat-suggestions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .suggestion-chip {
+            background: var(--color-background-secondary);
+            padding: 10px 14px;
+            border-radius: var(--border-radius-md);
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .chat-form {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--color-border);
+            background: var(--color-background-tertiary);
+            border-radius: var(--border-radius-md);
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            outline: none;
+            resize: none;
+            min-height: 48px;
+            max-height: 120px;
+            line-height: 1.4;
+        }
+
+        .chat-input:focus { border-color: var(--color-primary); }
+
+        /* Modal */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content {
+            width: 100%;
+            background: var(--color-background-primary);
+            border-top-left-radius: var(--border-radius-xl);
+            border-top-right-radius: var(--border-radius-xl);
+            padding: 24px 20px 40px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+        }
+
+        .ai-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-primary);
+            background: var(--color-primary-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            height: 180px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            padding: 16px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .modal-textarea:focus { border-color: var(--color-primary); }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            justify-content: center;
+            padding: 14px;
+        }
+
+        /* Inline Charts */
+        .chart-inline {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-label {
+            font-size: 11px;
+            font-weight: 600;
+            width: 50px;
+        }
+
+        .chart-bar-wrap {
+            flex: 1;
+            height: 16px;
+            background: var(--color-border-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: 8px;
+        }
+
+        .chart-value {
+            font-size: 11px;
+            font-weight: 700;
+            width: 30px;
+            text-align: right;
+        }
+
+        /* Hidden Utility */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="pwa-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <div>
+                    <div class="date-label" id="current-date">Thursday, 23 Apr</div>
+                    <h1 class="user-greeting" id="greeting-title">Hey Abhilash</h1>
+                </div>
+                <div class="avatar">AB</div>
+            </div>
+            <div class="greeting-line" id="dynamic-greeting">
+                Loading today's status...
+            </div>
+        </header>
+
+        <!-- Tab: Today -->
+        <main class="content" id="tab-today">
+            <div class="section-label">Active Users Yesterday</div>
+            <div class="dau-scroll">
+                <div class="dau-chip">Delhi <span class="trend-down">142 ↓8</span></div>
+                <div class="dau-chip">Lucknow <span class="trend-down">38 ↓5</span></div>
+                <div class="dau-chip">Jaipur <span class="trend-up">61 ↑12</span></div>
+                <div class="dau-chip">Meerut <span class="trend-neutral">47 →</span></div>
+                <div class="dau-chip">Noida <span class="trend-up">89 ↑3</span></div>
+            </div>
+
+            <div class="section-label">Needs Your Attention</div>
+            <div id="commitment-cards">
+                <!-- Cards injected by JS -->
+            </div>
+
+            <div class="section-label">City Swaps Per Battery</div>
+            <div class="city-grid">
+                <div class="city-card">
+                    <div class="city-name">Delhi</div>
+                    <div class="city-value trend-down">2.4</div>
+                    <div class="city-sub">Target 3.0</div>
+                </div>
+                <div class="city-card">
+                    <div class="city-name">Meerut</div>
+                    <div class="city-value trend-up">3.6</div>
+                    <div class="city-sub">Best in network</div>
+                </div>
+                <div class="city-card">
+                    <div class="city-name">Lucknow</div>
+                    <div class="city-value trend-down">2.1</div>
+                    <div class="city-sub">Growth mgr silent</div>
+                </div>
+                <div class="city-card">
+                    <div class="city-name">Jaipur</div>
+                    <div class="city-value trend-neutral">2.8</div>
+                    <div class="city-sub">Station 2 down</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Tab: Ask -->
+        <main class="content hidden" id="tab-ask">
+            <div class="chat-container">
+                <div class="chat-history" id="chat-history">
+                    <div class="message message-ai">
+                        Good morning Abhilash. I'm ready to answer any questions across all 14 domains. What's on your mind?
+                    </div>
+                </div>
+                
+                <div id="typing-indicator" class="typing-indicator hidden" style="margin: 0 16px 16px;">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="chat-suggestions" id="chat-suggestions">
+                        <button class="suggestion-chip" onclick="handleSuggestion('What is today\'s total revenue across all cities?')">What's today's total revenue? ↗</button>
+                        <button class="suggestion-chip" onclick="handleSuggestion('Show me all open follow-ups and commitments that are overdue')">Show all pending follow-ups ↗</button>
+                        <button class="suggestion-chip" onclick="handleSuggestion('Draft a weekly ops summary covering all 5 cities')">Draft weekly ops summary ↗</button>
+                    </div>
+                    <form class="chat-form" id="chat-form">
+                        <textarea class="chat-input" id="chat-input" placeholder="Ask anything..." autocomplete="off" rows="1"></textarea>
+                        <button type="submit" class="btn" style="height: 48px; padding: 0 16px; background: var(--color-primary); border: none;">
+                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="white" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('today')" id="nav-today">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                Today
+            </button>
+            <button class="tab-btn" onclick="switchTab('ask')" id="nav-ask">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                Ask ↗
+            </button>
+        </nav>
+
+        <!-- Modal Overlay -->
+        <div class="modal-overlay" id="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Draft Message</h3>
+                    <button class="modal-close" onclick="closeModal()">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="ai-label">AI draft — edit before sending</div>
+                <textarea class="modal-textarea" id="modal-textarea" spellcheck="false"></textarea>
+                <div class="modal-actions">
+                    <button class="btn" id="edit-btn" onclick="document.getElementById('modal-textarea').focus(); this.classList.add('hidden')">Edit first</button>
+                    <button class="btn btn-primary" onclick="sendWhatsApp()">Send on WhatsApp ↗</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * DYNAMIC DATA POOL
+         */
+        const POTENTIAL_ISSUES = [
+            { city: "Delhi", owner: "Ravi", role: "Ops Head", category: "Swap Rate", issueBase: "Swap rate {v1} vs 3.0 target — ₹{v2}K daily gap", impactBase: 32000, threshold: 48 },
+            { city: "Lucknow", owner: "Sandeep", role: "Growth Manager", category: "Growth", issueBase: "Swap rate {v1} — lowest in network. DAU {v2} (↓{v3})", impactBase: 15000, threshold: 48 },
+            { city: "Noida", owner: "Amit", role: "Inventory", category: "Procurement", issueBase: "{v1}-battery procurement confirmation missed", impactBase: 20000, threshold: 48, dateOffset: 5 },
+            { city: "Meerut", owner: "Vikram", role: "Growth", category: "Expansion", issueBase: "Zone B expansion proposal due {v1}", impactBase: 0, threshold: 72, dateOffset: 2 },
+            { city: "Jaipur", owner: "Unassigned", role: "Ops", category: "Maintenance", issueBase: "Station {v1} down — No owner assigned yet", impactBase: 12000, threshold: 24 },
+            { city: "Delhi", owner: "Suresh", role: "Fleet", category: "Compliance", issueBase: "{v1} riders without valid permits in North zone", impactBase: 5000, threshold: 72 },
+            { city: "Lucknow", owner: "Priya", role: "Finance", category: "Cash", issueBase: "₹{v1}K cash sitting with field agents for {v2} days", impactBase: 8000, threshold: 24 },
+            { city: "Noida", owner: "Rahul", role: "Tech", category: "Uptime", issueBase: "Station {v1} offline for {v2} hours due to inverter fault", impactBase: 18000, threshold: 12 },
+            { city: "Jaipur", owner: "Anil", role: "Franchise", category: "Payment", issueBase: "Franchise fee of ₹{v1}L overdue by {v2} days", impactBase: 25000, threshold: 96 }
+        ];
+
+        let COMMITMENTS = [];
+
+        function randomizeData() {
+            const shuffled = [...POTENTIAL_ISSUES].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 5 + Math.floor(Math.random() * 2));
+            const today = new Date();
+
+            COMMITMENTS = selected.map((item, idx) => {
+                const daysAgo = Math.floor(Math.random() * 6);
+                let issue = item.issueBase;
+                let financialImpact = item.impactBase + (Math.floor(Math.random() * 5000) - 2500);
+                let commitmentDate = null;
+
+                if (item.category === "Swap Rate") {
+                    issue = issue.replace("{v1}", (2.1 + Math.random()).toFixed(1)).replace("{v2}", (financialImpact/1000).toFixed(0));
+                } else if (item.category === "Growth") {
+                    issue = issue.replace("{v1}", (1.8 + Math.random()).toFixed(1)).replace("{v2}", 30 + Math.floor(Math.random() * 20)).replace("{v3}", 3 + Math.floor(Math.random() * 5));
+                } else if (item.category === "Procurement") {
+                    issue = issue.replace("{v1}", 20 + Math.floor(Math.random() * 30));
+                    commitmentDate = new Date(today);
+                    commitmentDate.setDate(today.getDate() - (item.dateOffset || 3));
+                    commitmentDate = commitmentDate.toISOString().split('T')[0];
+                } else if (item.category === "Expansion") {
+                    issue = issue.replace("{v1}", "25 Apr");
+                    commitmentDate = new Date(today);
+                    commitmentDate.setDate(today.getDate() + (item.dateOffset || 2));
+                    commitmentDate = commitmentDate.toISOString().split('T')[0];
+                } else if (item.category === "Maintenance" || item.category === "Uptime") {
+                    issue = issue.replace("{v1}", 1 + Math.floor(Math.random() * 5)).replace("{v2}", 2 + Math.floor(Math.random() * 10));
+                } else if (item.category === "Cash" || item.category === "Payment") {
+                    issue = issue.replace("{v1}", 40 + Math.floor(Math.random() * 100)).replace("{v2}", 2 + Math.floor(Math.random() * 5));
+                } else if (item.category === "Compliance") {
+                    issue = issue.replace("{v1}", 10 + Math.floor(Math.random() * 15));
+                }
+
+                return {
+                    id: `id-${idx}`,
+                    city: item.city,
+                    owner: item.owner,
+                    role: item.role,
+                    category: item.category,
+                    issue: issue,
+                    lastUpdateDaysAgo: daysAgo,
+                    commitmentDate: commitmentDate,
+                    commitmentText: item.category === "Procurement" ? "Confirm procurement" : null,
+                    financialImpact: Math.max(0, financialImpact),
+                    priority: financialImpact > 20000 ? "blocker" : "fire",
+                    silenceThresholdHours: item.threshold
+                };
+            });
+        }
+
+        function randomizeChips() {
+            const chips = [
+                "What is today's total revenue across all cities?",
+                "Show me all open follow-ups and commitments that are overdue",
+                "Draft a weekly ops summary covering all 5 cities",
+                "Which city has the lowest swap rate today?",
+                "Analyze the impact of cash sitting in Lucknow",
+                "Show me procurement delays for the next 7 days",
+                "What's the status of Meerut expansion?"
+            ];
+            const shuffled = chips.sort(() => 0.5 - Math.random());
+            const container = document.getElementById('chat-suggestions');
+            container.innerHTML = '';
+            shuffled.slice(0, 4).forEach(text => {
+                const btn = document.createElement('button');
+                btn.className = 'suggestion-chip';
+                btn.innerText = text.length > 30 ? text.substring(0, 30) + '... ↗' : text + ' ↗';
+                btn.onclick = () => handleSuggestion(text);
+                container.appendChild(btn);
+            });
+        }
+
+        /**
+         * AI CONTEXT
+         */
+        const SYSTEM_PROMPT = `
+You are an AI operations assistant for Abhilash, Business Head of Yuma, an EV battery swapping company.
+
+Abhilash's style: data-first, numbers before narrative, hates chasing people, direct and brief.
+
+Current Date: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+
+When drafting WhatsApp messages: under 5 lines, reference the specific commitment or silence duration, firm but not aggressive, sound like something Abhilash would write himself.
+
+IMPORTANT: When asked to "Refine this message" or similar instructions for a draft, you MUST return ONLY the final message body text. No conversational filler, no "Here is your message". Just the raw text that Abhilash can send on WhatsApp.
+
+When answering data questions: lead with numbers, use tables or comparisons where useful.
+When asked about revenue or P&L: connect to swap rates and battery utilisation.
+
+If the user asks for comparison across cities, provide the data in a format that I can parse to render bar charts. 
+Example: "CHART: Delhi: 2.4, Noida: 3.2, Meerut: 3.6, Jaipur: 2.8, Lucknow: 2.1"
+`;
+
+        /**
+         * CORE LOGIC
+         */
+
+        function init() {
+            randomizeData();
+            randomizeChips();
+            renderToday();
+            setupChat();
+            
+            // Set current date in header - Real Time
+            const today = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'short' };
+            document.getElementById('current-date').innerText = today.toLocaleDateString('en-US', options);
+        }
+
+        function renderToday() {
+            const today = new Date(); // Use real-time date
+            const container = document.getElementById('commitment-cards');
+            container.innerHTML = '';
+
+            // Calculate scores and badges
+            const scoredCommitments = COMMITMENTS.map(c => {
+                const isMissed = c.commitmentDate && new Date(c.commitmentDate) < today;
+                const score = (c.lastUpdateDaysAgo * 2) + (c.financialImpact / 10000) + (isMissed ? 3 : 0);
+                
+                let badge = "";
+                let badgeClass = "";
+
+                if (c.lastUpdateDaysAgo * 24 >= c.silenceThresholdHours && !c.commitmentDate) {
+                    badge = `Silent ${c.lastUpdateDaysAgo}d`;
+                    badgeClass = "badge-red";
+                } else if (c.commitmentDate && new Date(c.commitmentDate) < today) {
+                    const daysOverdue = Math.max(0, Math.floor((today - new Date(c.commitmentDate)) / (1000*60*60*24)));
+                    badge = `Overdue ${daysOverdue}d`;
+                    badgeClass = "badge-red";
+                } else if (c.commitmentDate && new Date(c.commitmentDate) >= today) {
+                    badge = "Committed";
+                    badgeClass = "badge-amber";
+                } else if (c.lastUpdateDaysAgo === 0) {
+                    badge = "Active";
+                    badgeClass = "badge-green";
+                } else {
+                    badge = "Active";
+                    badgeClass = "badge-green";
+                }
+
+                return { ...c, score, badge, badgeClass, isMissed };
+            });
+
+            // Sort by score
+            scoredCommitments.sort((a, b) => b.score - a.score);
+
+            // Update Dynamic Greeting (Rule 111 & 158)
+            const top3 = scoredCommitments.filter(c => c.score > 0).slice(0, 3);
+            const greetingVariants = [
+                `${top3.map(c => `${c.owner} ${c.badge.toLowerCase()}`).join(' · ')}`,
+                `${top3[0].owner} blocking ₹${(top3[0].financialImpact/1000).toFixed(0)}K/day · ${top3[1].owner} silent · ${top3[2].owner} missed commitment`,
+                `Urgent: ${top3[0].owner} ${top3[0].badge} · ${top3[1].owner} ${top3[1].badge} · ${top3[2].owner} ${top3[2].badge}`
+            ];
+            const greetingText = greetingVariants[Math.floor(Math.random() * greetingVariants.length)];
+            document.getElementById('dynamic-greeting').innerText = `${scoredCommitments.length} things need you today — ${greetingText}`;
+
+            // Render Cards
+            scoredCommitments.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                // Contextual Button Labels (Rule 119)
+                let mainBtnLabel = "";
+                if (!c.commitmentDate && c.lastUpdateDaysAgo > 0) {
+                    mainBtnLabel = `Follow up with ${c.owner} — silent ${c.lastUpdateDaysAgo}d ↗`;
+                } else if (c.isMissed) {
+                    mainBtnLabel = `Chase ${c.owner} — commitment missed ↗`;
+                } else if (c.commitmentDate) {
+                    mainBtnLabel = `Check in with ${c.owner} ↗`;
+                } else {
+                    mainBtnLabel = `Message ${c.owner} ↗`;
+                }
+
+                // Card Title frames accountability (Rule 164) + Category focus (New)
+                let cardTitle = `${c.owner}: ${c.category} issue in ${c.city}`;
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">${cardTitle}</div>
+                        <div class="badge ${c.badgeClass}">${c.badge}</div>
+                    </div>
+                    <div class="card-body">
+                        ${c.issue}
+                    </div>
+                    <div class="card-meta">
+                        <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Last update ${c.lastUpdateDaysAgo}d ago · ${c.city}
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn" onclick="callGemini('Draft a WhatsApp message to ${c.owner} about ${c.issue}. Reference that they have been silent for ${c.lastUpdateDaysAgo} days.', false, '${c.owner}', '${c.id}')">${mainBtnLabel}</button>
+                        <button class="btn" onclick="showBreakdown('${c.id}')">See breakdown ↗</button>
+                        <button class="btn" onclick="callGemini('Who should I delegate the ${c.city} ${c.owner} issue to?', false, '${c.owner}', '${c.id}')">Delegate ↗</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /**
+         * TAB SWITCHING
+         */
+        function switchTab(tab) {
+            document.getElementById('tab-today').classList.toggle('hidden', tab !== 'today');
+            document.getElementById('tab-ask').classList.toggle('hidden', tab !== 'ask');
+            
+            document.getElementById('nav-today').classList.toggle('active', tab === 'today');
+            document.getElementById('nav-ask').classList.toggle('active', tab === 'ask');
+        }
+
+        let isRefining = false;
+        let currentRecipient = '';
+        let currentItemId = '';
+
+        /**
+         * CHAT LOGIC
+         */
+        function setupChat() {
+            const form = document.getElementById('chat-form');
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                const input = document.getElementById('chat-input');
+                const text = input.value.trim();
+                if (text) {
+                    addChatMessage(text, 'user');
+                    input.value = '';
+                    input.style.height = '48px'; // Reset height
+                    
+                    if (isRefining) {
+                        // Refinement loop (New)
+                        callGemini(text, false, currentRecipient, currentItemId);
+                        isRefining = false;
+                    } else {
+                        callGemini(text, true);
+                    }
+                }
+            };
+        }
+
+        function handleSuggestion(text) {
+            document.getElementById('chat-input').value = text;
+            // Immediate send for suggestions to show visuals
+            const form = document.getElementById('chat-form');
+            const submitEvent = new Event('submit', { cancelable: true });
+            form.dispatchEvent(submitEvent);
+        }
+
+        function showBreakdown(id, silent = false) {
+            const item = COMMITMENTS.find(c => c.id === id);
+            let content = "";
+            
+            if (item.category === 'Swap Rate') {
+                content = `CHART: ${item.city} Stn 1: 2.1, ${item.city} Stn 2: 2.3, Hub A: 2.5, Hub B: 2.8\n\nIdentified issues across 2 stations. Localized maintenance confirmed for Station 1.`;
+            } else if (item.category === 'Growth') {
+                content = `| Area | Yesterday | Today | Δ | \n|---|---|---|---|\n| North | 18 | 12 | -33% |\n| South | 12 | 15 | +25% |\n| East | 8 | 11 | +37% |`;
+            } else if (item.category === 'Procurement') {
+                content = `SUMMARY: Procurement Status - ${item.city}|Ordered: 12 Apr|ETA: 18 Apr|Status: Delayed (Warehouse)|Risk: ₹${(item.financialImpact/1000).toFixed(0)}K daily`;
+            } else {
+                content = `SUMMARY: ${item.city} ${item.category} Status|Owner: ${item.owner}|Days: ${item.lastUpdateDaysAgo}d|Status: ${item.priority.toUpperCase()}|Impact: ₹${(item.financialImpact/1000).toFixed(0)}K`;
+            }
+
+            if (!silent) {
+                switchTab('ask');
+                addChatMessage(`Show me the breakdown for ${item.city} ${item.category} issue`, 'user');
+            }
+            
+            setTimeout(() => {
+                addChatMessage(content, 'ai');
+            }, 500);
+        }
+
+        function addChatMessage(text, role) {
+            const history = document.getElementById('chat-history');
+            const msg = document.createElement('div');
+            msg.className = `message message-${role}`;
+            
+            // Handle SUMMARY: prefix for structured layout
+            if (text.startsWith('SUMMARY:')) {
+                const parts = text.replace('SUMMARY:', '').split('|');
+                const title = parts[0].trim();
+                const grid = document.createElement('div');
+                grid.style.display = 'grid';
+                grid.style.gridTemplateColumns = '1fr 1fr';
+                grid.style.gap = '8px';
+                grid.style.marginTop = '10px';
+                
+                const titleEl = document.createElement('div');
+                titleEl.style.gridColumn = '1 / -1';
+                titleEl.style.fontWeight = '700';
+                titleEl.style.marginBottom = '4px';
+                titleEl.innerText = title;
+                grid.appendChild(titleEl);
+
+                parts.slice(1).forEach(p => {
+                    const [k, v] = p.split(':').map(x => x.trim());
+                    const cell = document.createElement('div');
+                    cell.style.background = 'white';
+                    cell.style.padding = '8px';
+                    cell.style.borderRadius = '8px';
+                    cell.style.border = '1px solid var(--color-border)';
+                    cell.innerHTML = `<div style="font-size: 10px; color: var(--color-text-tertiary); text-transform: uppercase;">${k}</div><div style="font-weight: 600; font-size: 12px;">${v}</div>`;
+                    grid.appendChild(cell);
+                });
+                msg.appendChild(grid);
+            } else {
+                // Render text with line breaks
+                const textSpan = document.createElement('span');
+                textSpan.innerHTML = text.replace(/\n/g, '<br>').split('CHART:')[0].split('|')[0];
+                msg.appendChild(textSpan);
+            }
+
+            // Check for chart data
+            if (text.includes('CHART:')) {
+                const parts = text.split('CHART:');
+                const chartData = parts[1].trim().split('\n')[0].split(',').map(s => {
+                    const [lbl, val] = s.split(':').map(x => x.trim());
+                    return { lbl, val: parseFloat(val) };
+                });
+                
+                const chartContainer = document.createElement('div');
+                chartContainer.className = 'chart-inline';
+                const maxVal = Math.max(...chartData.map(d => d.val));
+                
+                chartData.forEach(d => {
+                    const perc = (d.val / maxVal) * 100;
+                    chartContainer.innerHTML += `
+                        <div class="chart-row">
+                            <div class="chart-label">${d.lbl}</div>
+                            <div class="chart-bar-wrap">
+                                <div class="chart-bar" style="width: ${perc}%"></div>
+                            </div>
+                            <div class="chart-value">${d.val}</div>
+                        </div>
+                    `;
+                });
+                msg.appendChild(chartContainer);
+            } 
+            
+            // Check for table data
+            if (text.includes('|') && !text.startsWith('SUMMARY:')) {
+                const tableWrap = document.createElement('div');
+                tableWrap.style.overflowX = 'auto';
+                tableWrap.style.marginTop = '10px';
+                
+                const table = document.createElement('table');
+                table.style.width = '100%';
+                table.style.fontSize = '12px';
+                table.style.borderCollapse = 'collapse';
+                table.style.background = 'white';
+                
+                const lines = text.split('\n').filter(l => l.includes('|'));
+                lines.forEach((line, i) => {
+                    if (line.includes('---')) return;
+                    const row = document.createElement('tr');
+                    const cleanCells = line.split('|').map(c => c.trim()).filter((c, idx, arr) => {
+                        if (idx === 0 && c === '') return false;
+                        if (idx === arr.length - 1 && c === '') return false;
+                        return true;
+                    });
+
+                    cleanCells.forEach(cell => {
+                        const td = document.createElement(i === 0 ? 'th' : 'td');
+                        td.style.border = '1px solid var(--color-border)';
+                        td.style.padding = '6px 8px';
+                        td.style.textAlign = 'left';
+                        td.style.color = 'var(--color-text-primary)';
+                        td.innerText = cell;
+                        row.appendChild(td);
+                    });
+                    table.appendChild(row);
+                });
+                tableWrap.appendChild(table);
+                msg.appendChild(tableWrap);
+            }
+
+            history.appendChild(msg);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        /**
+         * GEMINI API INTEGRATION
+         */
+        async function callGemini(prompt, isChat = false, recipient = '', itemId = '') {
+            if (isChat || (recipient && !isChat)) { // Show typing in chat even if modal-bound
+                document.getElementById('typing-indicator').classList.remove('hidden');
+                document.getElementById('chat-history').scrollTop = document.getElementById('chat-history').scrollHeight;
+            }
+
+            // Enhanced Mock Responses for suggestions
+            const mocks = {
+                "What is today's total revenue across all cities?": "CHART: Delhi: 1.2, Noida: 0.8, Meerut: 0.9, Jaipur: 0.7, Lucknow: 0.6\n\nTotal Revenue: ₹4.2 Lacs. Delhi leads but is 8% below target due to swap rate issues.",
+                "Show me all open follow-ups and commitments that are overdue": "| Owner | City | Issue | Status |\n|---|---|---|---|\n| Amit | Noida | Procurement | Overdue 5d |\n| Sandeep | Lucknow | Growth | Silent 3d |\n| Ravi | Delhi | Swap Rate | Silent 2d |",
+                "Draft a weekly ops summary covering all 5 cities": "SUMMARY: Weekly Ops Report (17-23 Apr)|Revenue: ₹42L (On Target)|Growth: Meerut (3.6 swaps)|Risk: Lucknow (2.1 swaps)|Maintenance: Jaipur Stn 2 Down|Compliance: 31 Low-swap drivers"
+            };
+
+            let aiText = mocks[prompt] || "";
+
+            try {
+                if (!aiText) {
+                    const response = await fetch('/api/gemini', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: "gemini-2.0-flash",
+                            messages: [
+                                { role: "system", content: SYSTEM_PROMPT },
+                                { role: "user", content: prompt }
+                            ],
+                            temperature: 0.4,
+                            max_tokens: 400
+                        })
+                    });
+
+                    const data = await response.json();
+                    aiText = data.choices[0].message.content;
+                }
+
+                document.getElementById('typing-indicator').classList.add('hidden');
+                if (isChat) {
+                    addChatMessage(aiText, 'ai');
+                } else {
+                    // Refinement completed - show in chat AND open modal
+                    addChatMessage(aiText, 'ai');
+                    openModal(aiText, recipient, itemId);
+                }
+            } catch (err) {
+                const fallback = "Ravi, Delhi swap rate is critical at 2.4 vs 3.0 target. This is causing a ₹32K daily gap. You haven't updated in 2 days. Need a resolution plan by EOD.";
+                document.getElementById('typing-indicator').classList.add('hidden');
+                if (isChat) {
+                    addChatMessage(aiText || "I'm having trouble connecting, but here's the data I have: " + fallback, 'ai');
+                } else {
+                    addChatMessage(aiText || fallback, 'ai');
+                    openModal(aiText || fallback, recipient, itemId);
+                }
+            }
+        }
+
+        /**
+         * MODAL LOGIC
+         */
+        function openModal(text, recipient = '', itemId = '') {
+            const overlay = document.getElementById('modal-overlay');
+            const textarea = document.getElementById('modal-textarea');
+            const chatBtn = document.getElementById('edit-btn');
+            const title = document.querySelector('.modal-title');
+            
+            title.innerText = recipient ? `Draft Message to ${recipient}` : "Draft Message";
+            textarea.value = text;
+            
+            chatBtn.innerText = "Edit in chat";
+            chatBtn.onclick = () => {
+                closeModal();
+                switchTab('ask');
+                
+                isRefining = true;
+                currentRecipient = recipient;
+                currentItemId = itemId;
+
+                // Show breakdown/context first
+                if (itemId) {
+                    const item = COMMITMENTS.find(c => c.id === itemId);
+                    addChatMessage(`I'm refining the message for ${item.city} ${item.category}. Here's the context:`, 'user');
+                    showBreakdown(itemId, true);
+                }
+
+                const chatInput = document.getElementById('chat-input');
+                chatInput.value = `Refine this message: ${text}`;
+                
+                chatInput.style.height = 'auto';
+                chatInput.style.height = (chatInput.scrollHeight) + 'px';
+                chatInput.focus();
+            };
+            
+            overlay.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        function sendWhatsApp() {
+            const text = document.getElementById('modal-textarea').value;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // Initialize
+        window.onload = init;
+    </script>
+</body>
+</html>

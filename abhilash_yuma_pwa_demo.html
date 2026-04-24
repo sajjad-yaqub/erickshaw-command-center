@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yuma Ops | Abhilash</title>
+    <meta name="description" content="Commitment and accountability tracker for Yuma Ops.">
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Design System Tokens */
+            --color-background-primary: #ffffff;
+            --color-background-secondary: #f8fafc;
+            --color-background-tertiary: #f1f5f9;
+            
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #475569;
+            --color-text-tertiary: #94a3b8;
+            
+            --color-primary: #2563eb;
+            --color-primary-bg: #eff6ff;
+            
+            --color-success: #10b981;
+            --color-success-bg: #ecfdf5;
+            
+            --color-warning: #f59e0b;
+            --color-warning-bg: #fffbeb;
+            
+            --color-danger: #ef4444;
+            --color-danger-bg: #fef2f2;
+            
+            --color-info: #0ea5e9;
+            --color-info-bg: #f0f9ff;
+            
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+            
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Outfit', var(--font-sans);
+            
+            --border-radius-sm: 6px;
+            --border-radius-md: 10px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 24px;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #e2e8f0; /* Desktop background */
+            font-family: var(--font-sans);
+            color: var(--color-text-primary);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Mobile Container (iPhone 375px) */
+        .pwa-container {
+            width: 100%;
+            max-width: 375px;
+            height: 812px; /* iPhone height */
+            background: var(--color-background-tertiary);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            border-radius: var(--border-radius-xl);
+        }
+
+        @media (max-width: 375px) {
+            body { background: var(--color-background-tertiary); }
+            .pwa-container { height: 100vh; border-radius: 0; box-shadow: none; }
+        }
+
+        /* Header & Greeting */
+        .header {
+            background: var(--color-background-primary);
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .date-label {
+            font-size: 12px;
+            color: var(--color-text-tertiary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .user-greeting {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-primary-bg);
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid var(--color-border);
+        }
+
+        .greeting-line {
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--color-text-secondary);
+            background: var(--color-background-secondary);
+            padding: 10px 14px;
+            border-radius: var(--border-radius-md);
+            border-left: 3px solid var(--color-primary);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 16px 100px;
+            scroll-behavior: smooth;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 20px 0 10px 4px;
+        }
+
+        /* Commitment Cards */
+        .card {
+            background: var(--color-background-primary);
+            border-radius: var(--border-radius-lg);
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ch { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 12px; }
+        .ct { font-family: var(--font-heading); font-size: 15px; font-weight: 600; color: var(--color-text-primary); line-height: 1.3; flex: 1; }
+        .badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; white-space: nowrap; }
+        .br { background: var(--color-danger-bg); color: var(--color-danger); }
+        .ba { background: var(--color-warning-bg); color: var(--color-warning); }
+        .bg { background: var(--color-success-bg); color: var(--color-success); }
+        .bi { background: var(--color-info-bg); color: var(--color-info); }
+
+        .cb { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 14px; }
+        .cm { font-size: 11px; color: var(--color-text-tertiary); display: flex; align-items: center; gap: 4px; margin-bottom: 14px; }
+        .ca { display: flex; gap: 8px; flex-wrap: wrap; }
+        .abtn { font-family: var(--font-sans); font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border); background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s; }
+        .abtn:active { background: var(--color-background-secondary); transform: scale(0.98); }
+
+        /* City pulse */
+        .sl { font-size: 11px; font-weight: 600; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin: 20px 0 10px 4px; }
+        .cgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .cc { background: var(--color-background-primary); padding: 12px; border-radius: var(--border-radius-md); border: 1px solid var(--color-border); }
+        .cn { font-size: 10px; font-weight: 700; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+        .cv { font-size: 18px; font-weight: 700; color: var(--color-text-primary); }
+        .cu { font-size: 10px; font-weight: 500; color: var(--color-text-tertiary); margin-left: 2px; }
+        .cs { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+        .rdt { color: var(--color-danger); }
+        .gnt { color: var(--color-success); }
+        .amt { color: var(--color-warning); }
+
+        /* Tab Bar */
+        .tabbar { position: absolute; bottom: 0; left: 0; right: 0; height: 72px; background: var(--color-background-primary); border-top: 1px solid var(--color-border); display: flex; padding: 0 20px; z-index: 100; }
+        .tab { flex: 1; border: none; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--color-text-tertiary); cursor: pointer; font-size: 11px; font-weight: 600; }
+        .tab.active { color: var(--color-primary); }
+
+        /* Ask Tab */
+        .ask-wrap { padding: 40px 20px; text-align: center; }
+        .ask-lbl { font-family: var(--font-heading); font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .ask-sub { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 32px; line-height: 1.5; }
+        .chips { display: flex; flex-direction: column; gap: 10px; }
+        .chip { background: var(--color-background-primary); border: 1px solid var(--color-border); padding: 14px; border-radius: var(--border-radius-lg); text-align: left; font-size: 13px; color: var(--color-text-primary); cursor: pointer; font-weight: 500; box-shadow: var(--shadow-sm); }
+        .ask-note { margin-top: 40px; font-size: 12px; color: var(--color-text-tertiary); font-style: italic; }
+
+        .hidden { display: none !important; }
+        .fc { display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+<div class="pwa-container">
+  <header class="header">
+    <div class="header-top">
+      <div>
+        <div class="date-label">Thursday, 23 Apr</div>
+        <h1 class="user-greeting">Hey Abhilash</h1>
+      </div>
+      <div class="avatar">AB</div>
+    </div>
+    <div class="greeting-line">
+      Sandeep silent 3d · Amit missed commitment · Ravi blocking ₹32K/day
+    </div>
+  </header>
+
+  <div class="content" id="tab-today">
+    <div class="sl">Needs your attention right now</div>
+    
+    <div id="cards">
+      <div class="card" onclick="sendPrompt('Ravi hasn\'t updated on the Delhi swap rate issue in 2 days. Swap rate is 2.4 vs 3.0 target. What is the impact?')">
+        <div class="ch"><div class="ct">Ravi hasn't resolved Delhi swap — 2 days</div><div class="badge br">Silent 2d</div></div>
+        <div class="cb">2.4 swaps/battery vs 3.0 target — ₹32K/day at risk. Ravi (Ops Head) flagged a maintenance issue Monday but hasn't updated since.</div>
+        <div class="cm">Source: Station data + WhatsApp · Battery capital at risk</div>
+        <div class="ca">
+          <button class="abtn" onclick="event.stopPropagation();sendPrompt('Draft a WhatsApp message to Ravi asking for resolution update on Delhi swap rate issue')">Message Ravi ↗</button>
+          <button class="abtn" onclick="event.stopPropagation();sendPrompt('Break down which 18 batteries in Delhi are underperforming and why')">See breakdown ↗</button>
+        </div>
+      </div>
+
+      <div class="card" onclick="sendPrompt('Lucknow DAU dropped 5 to 38 and swap rate is 2.1 per battery. Growth manager has been silent 3 days. What is happening?')">
+        <div class="ch"><div class="ct">Lucknow: swap rate 2.1 — growth mgr silent 3d</div><div class="badge br">Fire</div></div>
+        <div class="cb">Lowest swap rate in the network. DAU dropped 5 to 38. Sandeep (Growth, Lucknow) hasn't responded in the ops group since Friday.</div>
+        <div class="cm">Source: Ops report + WhatsApp silence detected</div>
+        <div class="ca">
+          <button class="abtn" onclick="event.stopPropagation();sendPrompt('Draft a WhatsApp message to Sandeep to get a Lucknow status update urgently')">Draft message ↗</button>
+        </div>
+      </div>
+
+      <div class="card" onclick="sendPrompt('Noida battery procurement is stuck for 4 days. Amit from Inventory committed on Thursday and has not updated. What should I do?')">
+        <div class="ch"><div class="ct">Noida procurement — Amit hasn't confirmed</div><div class="badge ba">4 days overdue</div></div>
+        <div class="cb">40 batteries waiting. Amit (Inventory) committed Thursday 18 Apr — no update since. Noida at risk of capacity drop this week if not resolved today.</div>
+        <div class="cm">Source: WhatsApp group · Committed: Thu 18 Apr</div>
+        <div class="ca">
+          <button class="abtn" onclick="event.stopPropagation();sendPrompt('Draft a follow-up message to Amit on Noida battery procurement. Make it firm but not aggressive.')">Follow up ↗</button>
+        </div>
+      </div>
+
+      <div class="card" onclick="sendPrompt('Meerut is at 3.6 swaps per battery for 3 weeks. Vikram wants to explore zone B expansion. What do I need to evaluate?')">
+        <div class="ch"><div class="ct">Meerut ready for zone expansion</div><div class="badge bg">Growth signal</div></div>
+        <div class="cb">Best in network at 3.6 swaps/battery, 3 weeks running. Vikram (Growth, Meerut) has raised zone B. 2 franchise inquiries pending — decision trigger may be met.</div>
+        <div class="cm">Source: P&L + growth mgr update last week</div>
+        <div class="ca">
+          <button class="abtn" onclick="event.stopPropagation();sendPrompt('What are the criteria to approve Meerut Zone B expansion? Check vehicles in area and franchise availability.')">Evaluate ↗</button>
+        </div>
+      </div>
+
+      <div class="card" onclick="sendPrompt('There are 31 drivers doing less than 1 swap per day across all cities. What is the monthly cost impact and what should I do?')">
+        <div class="ch"><div class="ct">31 low-swap drivers tying up battery capital</div><div class="badge bi">Margin leak</div></div>
+        <div class="cb">Delhi 14, Lucknow 9, Jaipur 5, Noida 3. Estimated cost impact ₹58K/month in idle battery capital. Review or offboard before next P&L cycle.</div>
+        <div class="cm">Identified from swap data across all cities</div>
+        <div class="ca">
+          <button class="abtn" onclick="event.stopPropagation();sendPrompt('Show me the full list of low swap drivers with their city, swap rate, and how long they have been low')">View list ↗</button>
+          <button class="abtn" onclick="event.stopPropagation();sendPrompt('Who should I delegate the low-swap driver review to in each city?')">Delegate ↗</button>
+        </div>
+      </div>
+
+      <div class="sl">City pulse — swaps per battery/day</div>
+      <div class="cgrid">
+        <div class="cc"><div class="cn">Delhi</div><div class="cv rdt">2.4 <span class="cu">/ bat</span></div><div class="cs">2 stations down</div></div>
+        <div class="cc"><div class="cn">Noida</div><div class="cv gnt">3.2 <span class="cu">/ bat</span></div><div class="cs">Procurement delayed</div></div>
+        <div class="cc"><div class="cn">Meerut</div><div class="cv gnt">3.6 <span class="cu">/ bat</span></div><div class="cs">All clear ✓</div></div>
+        <div class="cc"><div class="cn">Jaipur</div><div class="cv amt">2.8 <span class="cu">/ bat</span></div><div class="cs">Station 2 down</div></div>
+      </div>
+      <div class="cc" style="margin-top:7px">
+        <div class="fc">
+          <div><div class="cn">Lucknow</div><div class="cv rdt">2.1 <span class="cu">/ bat</span></div></div>
+          <div class="cs" style="text-align:right">Growth mgr<br>silent 3 days</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content hidden" id="tab-ask">
+    <div class="ask-wrap">
+      <div class="ask-lbl">Ask anything</div>
+      <div class="ask-sub">Pulls from your WhatsApp, email, ops reports, and decisions log — not just one source.</div>
+      <div class="chips">
+        <button class="chip" onclick="sendPrompt('What is the total revenue across all cities today and how does it compare to last week?')">What's today's total revenue? ↗</button>
+        <button class="chip" onclick="sendPrompt('Which city should I prioritise this week to improve overall profitability?')">Where should I focus this week? ↗</button>
+        <button class="chip" onclick="sendPrompt('Show me all open follow-ups and commitments that are overdue across all cities')">Show all pending follow-ups ↗</button>
+        <button class="chip" onclick="sendPrompt('What decisions have been made about Jaipur expansion in the last month?')">Jaipur expansion decision log ↗</button>
+        <button class="chip" onclick="sendPrompt('Draft a weekly ops summary I can send to the team covering all 5 cities')">Draft weekly ops summary ↗</button>
+        <button class="chip" onclick="sendPrompt('What is the biggest blocker to profitability right now and what actions can I take this week?')">What is blocking growth most? ↗</button>
+      </div>
+      <div class="ask-note">The chat is an escape hatch — for when the surface above missed something or you need to go deeper.</div>
+    </div>
+  </div>
+
+  <nav class="tabbar">
+    <button class="tab active" id="btn-today" onclick="switchTab('today')">Today</button>
+    <button class="tab" id="btn-ask" onclick="switchTab('ask')">Ask ↗</button>
+  </nav>
+</div>
+
+<script>
+function switchTab(t){
+  document.getElementById('tab-today').classList.toggle('hidden',t!=='today');
+  document.getElementById('tab-ask').classList.toggle('hidden',t!=='ask');
+  document.getElementById('btn-today').classList.toggle('active',t==='today');
+  document.getElementById('btn-ask').classList.toggle('active',t==='ask');
+}
+function sendPrompt(p){
+  alert("Drafting: " + p);
+}
+</script>
+</body>
+</html>
