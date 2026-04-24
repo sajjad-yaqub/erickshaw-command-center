@@ -1,4 +1,4 @@
-# Erickshaw Command Center - Abhilash AI Operations Dashboard
+# Erickshaw Command Center - AI-native Operations Dashboard
 
 This is an AI-native, mobile-first PWA dashboard designed for the Business Head of Yuma (EV battery swapping company).
 
